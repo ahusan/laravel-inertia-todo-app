@@ -1,0 +1,57 @@
+version: "3"
+services:
+    mysql:
+        image: mariadb:10.6
+        container_name: mysql
+        restart: unless-stopped
+        tty: true
+        ports:
+            - 3307:3306
+        environment:
+            MYSQL_DATABASE: ${DB_DATABASE}
+            MYSQL_USER: ${DB_USERNAME}
+            MYSQL_PASSWORD: ${DB_PASSWORD}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+            SERVICE_TAGS: dev
+            SERVICE_NAME: mysql
+        volumes:
+            - todo-mysql-data:/var/lib/mysql
+        networks:
+            - default
+    php-fpm:
+        build:
+            context: .
+            dockerfile: /docker/php/DOCKERFILE
+        depends_on:
+            - mysql
+        container_name: php-fpm
+        restart: unless-stopped
+        user: www-data #Use www-data user for production usage
+        volumes:
+            #Project root
+            - ./:/var/www/html
+        networks:
+            - default #if you're using networks between containers
+    #Nginx server
+    nginx-server:
+        build:
+            context: .
+            dockerfile: /docker/nginx/DOCKERFILE
+        depends_on:
+            - php-fpm
+        container_name: nginx-server
+        restart: unless-stopped
+        ports:
+            - 9669:80
+        volumes:
+            #Project root
+            - ./:/var/www/html
+        environment:
+            - DOCUMENT_ROOT=/var/www/html/public
+            - CLIENT_MAX_BODY_SIZE=20M
+            - PHP_FPM_HOST=php-fpm:9000
+        networks:
+            - default
+volumes:
+  todo-mysql-data:
+    external: false

@@ -30,3 +30,16 @@ Run the tests
 ```
 php artisan test
 ```
+
+### Deploy docker containers
+#### Debian distros
+Run the bash script
+```
+bash ./build.sh
+```
+
+#### Windows docker (WSL)
+Run the powershell script 
+```
+./build.ps1
+```
