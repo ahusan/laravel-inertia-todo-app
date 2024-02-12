@@ -346,6 +346,8 @@ jobs:
 ## Scalability Recommendations And Solutions
 For scalability i would suggest to use docker swarm as this will need a bit of a new direction of docker compose file for it to work in a swarm area. I am showing an example compose file for this application. **<u>This has not been tested by me</u>**. In this example nginx service is used to host the frontend too, but i would suggest to make it scale, that we can make it its own service. Also instead of nginx we can use traefik to reverse proxy a cluster of applications in a docker swarm environment. I have made this from my current docker file to show that these are the things that will change.
 
+I would also suggest to have a dedicated database cluster for the application based on the requirements to scale this. I think for the purposes of this application a deduicated database is good enough. But if we want high availability and high performance having a cluster is a good choice. 
+
 ```yaml
 version: "3"
 services:
