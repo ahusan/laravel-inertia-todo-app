@@ -15,12 +15,15 @@ jobs:
 
       - name: Set up Docker
         run: |
-          ls -a
-          # bash setup-docker.sh
+          bash docker-setup.sh
 
-      - name: Log in to Docker Hub (if needed)
-        run: |
-          # Add your Docker Hub login steps here if you're pushing images
+      # - name: Set up php environment
+      #   run: |
+      #     bash php-setup.sh
+
+      # - name: Log in to Docker Hub (if needed)
+      #   run: |
+      #     # Add your Docker Hub login steps here if you're pushing images
 
       - name: Build and run Docker Compose
         run: |
