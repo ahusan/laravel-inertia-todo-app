@@ -20,3 +20,4 @@ RUN mkdir -p /storage/app/public \
     && ln -s /storage/app/public storage
 
 EXPOSE 80
+

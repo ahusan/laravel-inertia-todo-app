@@ -38,5 +38,13 @@ else
     echo -e  "\033[32mPassed tests: $skipped_tests\033[0m"
 fi
 
+# Build Vite for production
+echo -e  "\033[36mBuilding Vite for production\033[0m"
+npm run build
+if [ $? -ne 0 ]; then
+    echo -e  "\033[31mFailed to build for production\033[0m"
+    exit 1
+fi
+
 echo -e  "\033[36mBuild & Up latest\033[0m"
 docker compose up -d --build

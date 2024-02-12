@@ -19,5 +19,11 @@ if ($output -match "failed" -or $output -match "fail") {
     Write-Host "Skipped tests: $($testSummary[0])" -ForegroundColor Yellow
 }
 
+npm run build
+if($LASTEXITCODE -ne 0) {
+    Write-Host "NPM Build failed" -ForegroundColor Red
+    exit 1
+}
+
 Write-Host 'Build & Up latest' -ForegroundColor Cyan
 docker compose up -d --build
