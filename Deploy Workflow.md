@@ -178,3 +178,4 @@ server {
     }
 }
 ```
+This is the configuration for the nginx server to distribute traffic from this server
