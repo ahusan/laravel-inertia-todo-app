@@ -13,9 +13,9 @@ jobs:
       - name: Checkout the repository
         uses: actions/checkout@v2
 
-      - name: Set up Docker
-        run: |
-          bash docker-setup.sh
+      # - name: Set up Docker
+      #   run: |
+      #     bash docker-setup.sh
 
       # - name: Set up php environment
       #   run: |

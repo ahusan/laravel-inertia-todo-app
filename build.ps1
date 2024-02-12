@@ -1,5 +1,23 @@
 # This is a PowerShell script
 
+# this is now redundant as we are building it in the dockerfile
+# npm run build
+# if($LASTEXITCODE -ne 0) {
+#     Write-Host "NPM Build failed" -ForegroundColor Red
+#     exit 1
+# }
+
+Write-Host 'Build & Up latest' -ForegroundColor Cyan
+docker compose up -d --build
+if( $LASTEXITCODE -ne 0 ){
+    Write-Host "Docker Compose failed" -ForegroundColor Red
+    exit 1
+}
+docker compose exec -it php-fpm php artisan migrate:fresh
+if( $LASTEXITCODE -ne 0 ){
+    Write-Host "PHP artisan migration failed" -ForegroundColor Red
+    exit 1
+}
 # Run your command
 Write-Host 'Running tests' -ForegroundColor Cyan
 $output = & php artisan test | Tee-Object -FilePath testoutput.txt
@@ -18,13 +36,3 @@ if ($output -match "failed" -or $output -match "fail") {
     Write-Host "Passed tests: $($testSummary[1])" -ForegroundColor Green
     Write-Host "Skipped tests: $($testSummary[0])" -ForegroundColor Yellow
 }
-
-# this is now redundant as we are building it in the dockerfile
-# npm run build
-# if($LASTEXITCODE -ne 0) {
-#     Write-Host "NPM Build failed" -ForegroundColor Red
-#     exit 1
-# }
-
-Write-Host 'Build & Up latest' -ForegroundColor Cyan
-# docker compose up -d --build

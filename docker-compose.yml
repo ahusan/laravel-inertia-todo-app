@@ -21,7 +21,7 @@ services:
     php-fpm:
         build:
             context: .
-            dockerfile: /docker/php/DOCKERFILE
+            dockerfile: php-dockerfile
         depends_on:
             - mysql
         container_name: php-fpm
@@ -36,7 +36,7 @@ services:
     nginx-server:
         build:
             context: .
-            dockerfile: /docker/nginx/DOCKERFILE
+            dockerfile: nginx-dockerfile
         depends_on:
             - php-fpm
         container_name: nginx-server
