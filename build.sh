@@ -21,7 +21,7 @@
 
 # Run your command
 echo -e "\033[36mRunning tests\033[0m"
-output=$(php artisan test | tee output.txt)
+output=$(php artisan test | tee testoutput.txt)
 
 # Extract the number of passed and skipped tests
 skipped_tests=$(echo "$output" | grep -oP 'Tests: +\K[0-9]+(?= skipped)')
@@ -39,12 +39,13 @@ else
 fi
 
 # Build Vite for production
-echo -e  "\033[36mBuilding Vite for production\033[0m"
-npm run build
-if [ $? -ne 0 ]; then
-    echo -e  "\033[31mFailed to build for production\033[0m"
-    exit 1
-fi
+# this is now redundant as we are building it in the dockerfile
+# echo -e  "\033[36mBuilding Vite for production\033[0m"
+# npm run build
+# if [ $? -ne 0 ]; then
+#     echo -e  "\033[31mFailed to build for production\033[0m"
+#     exit 1
+# fi
 
 echo -e  "\033[36mBuild & Up latest\033[0m"
 docker compose up -d --build

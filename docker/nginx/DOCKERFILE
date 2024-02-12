@@ -2,6 +2,7 @@ FROM node:18.16.0 as build-stage
 
 WORKDIR /app
 
+# preparing the vite app for production
 COPY . .
 RUN npm install
 RUN npm run build
@@ -12,9 +13,12 @@ FROM nginx:alpine
 
 
 WORKDIR /var/www/html/public
+# copying the built app to the nginx server
 COPY --from=build-stage ./app/public /var/www/html/public
 
+# copying the nginx configuration file
 COPY ./docker/nginx/app.conf /etc/nginx/conf.d/app.conf
+#creating the storage folder and linking it to the public folder
 RUN mkdir -p /storage/app/public \
     && touch /storage/app/public/.ignore \
     && ln -s /storage/app/public storage

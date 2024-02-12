@@ -1,54 +1,19 @@
-# FROM php:8.3.2-cli
-
-# RUN curl -sS https://getcomposer.org/installer | php -- \
-#      --install-dir=/usr/local/bin --filename=composer
-
-# COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# RUN apt-get update && apt-get install -y zlib1g-dev \
-#     libzip-dev \
-#     unzip
-
-# RUN docker-php-ext-install pdo pdo_mysql sockets zip
-
-# RUN mkdir /app
-
-# COPY . /app
-
-# WORKDIR /app
-
-# #Workaround for composer not being able to run as root
-# ENV COMPOSER_ALLOW_SUPERUSER=1
-
-# CHOWN  -R www-data:www-data /app
-
-
-# # RUN composer diagnose
-
-# RUN composer install
-
-# # #Run test for php
-# # RUN php artisan test
-# # RUN php artisan migrate:refresh --seed
-
-# CMD php artisan serve --host=0.0.0.0 --port=8000
-
-# EXPOSE 8000
-
 FROM php:8.3-fpm
-
-
 COPY ./ ./
+# removing the vendor folder
 RUN rm -rf vendor
 
+# updating the packages in the image, and cleaning the obsolete packages 
 RUN apt-get update -y && apt-get upgrade -y && apt-get autoremove -y && apt-get autoclean -y
 
-# Install docker-php-extension-installer to make our lives easier with installing php extensions.
+# Installing php extensions using php-extension installer
 COPY --from=mlocati/php-extension-installer /usr/bin/install-php-extensions /usr/local/bin/
 RUN install-php-extensions @composer-2.2.4
+# Here we specify what extensions are needed for this application to run
 RUN install-php-extensions pdo_mysql sockets zip
 
-# Create folders required by Laravel
+
+# Create folders required by Laravel and giving permission to the created folder
 RUN mkdir -p bootstrap/cache storage/app storage/framework/cache storage/framework/sessions storage/framework/views \
     storage/logs secrets \
     && chown -R www-data /var/www /var/www/html \
