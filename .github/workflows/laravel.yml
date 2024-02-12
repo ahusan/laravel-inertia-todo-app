@@ -15,7 +15,8 @@ jobs:
 
       - name: Set up Docker
         run: |
-          bash setup-docker.sh
+          ls -a
+          # bash setup-docker.sh
 
       - name: Log in to Docker Hub (if needed)
         run: |
